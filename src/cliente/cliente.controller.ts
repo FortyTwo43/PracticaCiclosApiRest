@@ -1,8 +1,11 @@
-//hecho por derlis
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { ClienteService } from './cliente.service';
 import { CreateClienteDto } from './dto/create-cliente.dto';
 import { UpdateClienteDto } from './dto/update-cliente.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Rol } from '../usuario/entities/usuario.entity';
 
 @Controller('cliente')
 export class ClienteController {
@@ -13,21 +16,29 @@ export class ClienteController {
     return this.clienteService.create(createClienteDto);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Rol.MODERADOR, Rol.CLIENTE)
   @Get()
   findAll() {
     return this.clienteService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Rol.MODERADOR, Rol.CLIENTE, Rol.ARQUITECTO)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.clienteService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Rol.MODERADOR, Rol.CLIENTE)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateClienteDto: UpdateClienteDto) {
     return this.clienteService.update(id, updateClienteDto);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Rol.MODERADOR, Rol.CLIENTE)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.clienteService.remove(id);

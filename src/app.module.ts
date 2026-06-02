@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -16,30 +17,36 @@ import { ConversacionModule } from './conversacion/conversacion.module';
 import { MensajeModule } from './mensaje/mensaje.module';
 import { NotificacionModule } from './notificacion/notificacion.module';
 import { UsuarioModule } from './usuario/usuario.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-  TypeOrmModule.forRoot({
-  type: 'sqlite',
-  database: 'proyecto-equipo.sqlite',
-  entities: [__dirname + '/**/*.entity{.ts,.js}'],
-  synchronize: true, // Solo desarrollo
-  logging: true, // Para debug
- }),
-  AvanceModule,
-  ClienteModule,
-  IncidenciaModule,
-  VerifficacionModule,
-  ModeradorModule,
-  ValoracionModule,
-  ArquitectoModule,
-  ProyectoModule,
-  SolicitudproyectoModule,
-  ImagenModule,
-  ConversacionModule,
-  MensajeModule,
-  NotificacionModule,
-  UsuarioModule],
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    TypeOrmModule.forRoot({
+      type: 'sqlite',
+      database: 'proyecto-equipo.sqlite',
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: true, // Solo desarrollo
+      logging: true, // Para debug
+    }),
+    AvanceModule,
+    ClienteModule,
+    IncidenciaModule,
+    VerifficacionModule,
+    ModeradorModule,
+    ValoracionModule,
+    ArquitectoModule,
+    ProyectoModule,
+    SolicitudproyectoModule,
+    ImagenModule,
+    ConversacionModule,
+    MensajeModule,
+    NotificacionModule,
+    UsuarioModule,
+    AuthModule
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
