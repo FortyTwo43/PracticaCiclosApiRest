@@ -4,7 +4,20 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors(); // agregar esta línea para habilitar CORS
+  
+  const allowedOrigins = process.env.ALLOWED_CORS_DOMAINS?.split(',') || ['http://localhost:3000'];
+  app.enableCors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('No permitido por CORS'));
+      }
+    },
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
+
   app.setGlobalPrefix('api'); // agregar prefijo global "api"
   app.useGlobalPipes(new ValidationPipe({
     forbidNonWhitelisted: true,
