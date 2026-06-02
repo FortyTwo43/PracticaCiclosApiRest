@@ -16,6 +16,7 @@ import { ConversacionModule } from './conversacion/conversacion.module';
 import { MensajeModule } from './mensaje/mensaje.module';
 import { NotificacionModule } from './notificacion/notificacion.module';
 import { UsuarioModule } from './usuario/usuario.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -39,7 +40,8 @@ import { UsuarioModule } from './usuario/usuario.module';
   ConversacionModule,
   MensajeModule,
   NotificacionModule,
-  UsuarioModule],
+  UsuarioModule,
+  AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
