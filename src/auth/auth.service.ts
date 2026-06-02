@@ -1,5 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcryptjs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Usuario } from '../usuario/entities/usuario.entity';
@@ -26,5 +27,9 @@ export class AuthService {
     }
     
     throw new UnauthorizedException('Credenciales inválidas');
+  }
+  
+  async comparePassword(plainPassword: string, hash: string): Promise<boolean> {
+    return bcrypt.compare(plainPassword, hash);
   }
 }

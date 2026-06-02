@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne,} from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, BeforeInsert, BeforeUpdate } from "typeorm";
+import { Exclude } from 'class-transformer';
+import * as bcrypt from 'bcryptjs';
 import { Cliente } from "src/cliente/entities/cliente.entity";
 import { Arquitecto } from "src/arquitecto/entities/arquitecto.entity";
 
@@ -32,8 +34,18 @@ import { Arquitecto } from "src/arquitecto/entities/arquitecto.entity";
     @Column()
     estado: Estado;
 
+    @Exclude()
     @Column()
     password: string;
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    async hashPassword() {
+      if (this.password && !this.password.startsWith('$2b$')) {
+        const salt = await bcrypt.genSalt();
+        this.password = await bcrypt.hash(this.password, salt);
+      }
+    }
 
     @Column()
     fechaRegistro: string;
