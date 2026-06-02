@@ -17,8 +17,7 @@ export class UsuarioController {
     return this.usuarioService.create(dto);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Rol.MODERADOR)
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.usuarioService.findAll();

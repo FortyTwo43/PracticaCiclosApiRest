@@ -17,10 +17,9 @@ export class AuthService {
   async login(loginDto: LoginDto) {
     const user = await this.usuariosRepository.findOne({ where: { email: loginDto.email } });
 
-    // In a production application, you should hash the password with bcrypt
-    // and use bcrypt.compare here. Since we are testing we compare directly as stored.
-    if (user && user.password === loginDto.password) {
-      const payload = { email: user.email, sub: user.id_usuario };
+    const passwordValid = user && await bcrypt.compare(loginDto.password, user.password);
+    if (passwordValid) {
+      const payload = { email: user.email, sub: user.id_usuario, rol: user.rol };
       return {
         access_token: this.jwtService.sign(payload),
       };
